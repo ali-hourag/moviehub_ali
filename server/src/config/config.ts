@@ -39,4 +39,4 @@ export const CONFIG: TConfig = {
     }
 }
 
-export default CONFIG[ENV]
+export default CONFIG[ENV];
