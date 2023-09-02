@@ -9,6 +9,7 @@ interface IUserDocument extends Document {
     updatedAt: Date
 }
 
+// Define User types and properties with Schema
 const UserSchema = new Schema<IUserDocument>({
     name: {
         type: String,
@@ -28,6 +29,7 @@ const UserSchema = new Schema<IUserDocument>({
     }
 }, { timestamps: true, versionKey: false })
 
+// Provide an interface for the database to interact with user data
 const UserModel = model<IUserDocument>("User", UserSchema);
 
 export default UserModel;

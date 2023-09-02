@@ -7,10 +7,15 @@ type TConfig = {
 
 type EnvironmentConfig = {
     app: AppConfig;
+    db: MongoDBConfig
 }
 
 type AppConfig = {
     PORT: string | number;
+}
+
+type MongoDBConfig = {
+    URI: string;
 }
 
 //SET DEVELOPMENT ENVIRONMENT
@@ -30,13 +35,22 @@ export const CONFIG: TConfig = {
     development: {
         app: {
             PORT: process.env.PORT || 4000
+        },
+        db: {
+            URI: process.env.MONGODB_DATABASE_URI || 'mongodb://localhost:27017/test_development'
         }
     },
     production: {
         app: {
             PORT: process.env.PORT || 4001
+        },
+        db: {
+            URI: process.env.MONGODB_DATABASE_URI || 'mongodb://localhost:27017/test_development'
         }
     }
 }
+
+
+
 
 export default CONFIG[ENV];
