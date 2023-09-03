@@ -11,7 +11,8 @@ datasource db {
 }
 
 // Create models to map to the tables on database
-
+// User has a one to many relationship with Movie
+// Movie has a one to many relationship with Genre
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
@@ -30,6 +31,7 @@ model Movie {
   score       Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  // If movie is eliminated, then movie will be eliminated from User array and the Genre array
   User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String?  @db.ObjectId
   Genre       Genre?   @relation(fields: [genre], references: [name], onDelete: Cascade)

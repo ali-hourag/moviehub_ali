@@ -31,6 +31,8 @@ export const createUser = async (req: Request, res: Response) => {
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
 
+        // include so that User includes the movies that has created and shows
+        // id, name and year
         const allUsers = await prisma.user.findMany({
             include: {
                 movies: {

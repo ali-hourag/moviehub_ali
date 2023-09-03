@@ -12,6 +12,7 @@ export const createMovie = async (req: Request, res: Response) => {
             return;
         }
 
+        // Connect with User and Genre so that everything is updated.
         const newMovie = await prisma.movie.create({
             data: {
                 name,
