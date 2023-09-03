@@ -22,6 +22,36 @@ export const createGenre = async (req: Request, res: Response) => {
 }
 
 //---------------- GET GENRE ----------------
+export const getGenreByName = async (req: Request, res: Response) => {
+    const { genreName } = req.params
+
+    try {
+
+        const genre = await prismaClient.genre.findUnique({
+            where: {
+                name: genreName
+            },
+            include: {
+                movies: {
+                    select: {
+                        id: true,
+                        name: true,
+                        year: true
+                    }
+                }
+            }
+        });
+        if (!genre) {
+            res.status(404).send({ error: "Genre non-existent." });
+            return;
+        }
+        res.status(200).send(genre)
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
 export const getGenreById = async (req: Request, res: Response) => {
     const { genreId } = req.params
 
@@ -76,7 +106,27 @@ export const getAllGenres = async (req: Request, res: Response) => {
 }
 
 //---------------- GET ALL GENRES ----------------
-export const updateGenre = async (req: Request, res: Response) => {
+export const updateGenreByName = async (req: Request, res: Response) => {
+    const { genreName } = req.params;
+    const { name } = req.body;
+    try {
+
+        const allGenres = await prismaClient.genre.update({
+            where: {
+                name: genreName
+            },
+            data: {
+                name
+            }
+        })
+        res.status(201).send(allGenres)
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const updateGenreById = async (req: Request, res: Response) => {
     const { genreId } = req.params;
     const { name } = req.body;
     try {
@@ -97,6 +147,22 @@ export const updateGenre = async (req: Request, res: Response) => {
 }
 
 //---------------- DELETE GENRE ----------------
+export const deleteGenreByName = async (req: Request, res: Response) => {
+    const { genreName } = req.params;
+    try {
+
+        await prismaClient.genre.delete({
+            where: {
+                name: genreName
+            }
+        })
+        res.status(204).send()
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
 export const deleteGenreById = async (req: Request, res: Response) => {
     const { genreId } = req.params;
     try {

@@ -10,7 +10,7 @@ type ClientMongo = MongoClient<Prisma.PrismaClientOptions, never, DefaultArgs>
 type ClientPostgres = PostgresClient<Prisma.PrismaClientOptions, never, DefaultArgs>
 
 export const mongoClient: ClientMongo = new MongoClient();
-export const postgresClient = new PostgresClient();
+export const postgresClient: ClientPostgres = new PostgresClient();
 
 export let prismaClient: any
 
