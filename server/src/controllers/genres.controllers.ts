@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
-import GenreModel from "../model/genre.model";
+import prisma from "../db/clientPrisma";
 
 //---------------- CREATE GENRE ----------------
 export const createGenre = async (req: Request, res: Response) => {
     const { name } = req.body
 
     try {
-        console.log(name);
+
         if (!name) {
             res.status(404).send({ error: "Missing required fields." });
             return;
         }
 
-        const newGenre = await GenreModel.create({ name })
+        const newGenre = await prisma.genre.create({ data: { name } });
         res.status(201).send(newGenre)
 
     } catch (error) {
@@ -26,7 +26,20 @@ export const getGenreById = async (req: Request, res: Response) => {
 
     try {
 
-        const genre = await GenreModel.findById({ _id: genreId })
+        const genre = await prisma.genre.findUnique({
+            where: {
+                id: genreId
+            },
+            include: {
+                movies: {
+                    select: {
+                        id: true,
+                        name: true,
+                        year: true
+                    }
+                }
+            }
+        });
         if (!genre) {
             res.status(404).send({ error: "Genre non-existent." });
             return;
@@ -43,7 +56,17 @@ export const getAllGenres = async (req: Request, res: Response) => {
 
     try {
 
-        const allGenres = await GenreModel.find()
+        const allGenres = await prisma.genre.findMany({
+            include: {
+                movies: {
+                    select: {
+                        id: true,
+                        name: true,
+                        year: true
+                    }
+                }
+            }
+        });
         res.status(200).send(allGenres)
 
     } catch (error) {
@@ -57,9 +80,14 @@ export const updateGenre = async (req: Request, res: Response) => {
     const { name } = req.body;
     try {
 
-        const allGenres = await GenreModel.findByIdAndUpdate({ _id: genreId }, {
-            $set: { name: name }
-        }, { new: true })
+        const allGenres = await prisma.genre.update({
+            where: {
+                id: genreId
+            },
+            data: {
+                name
+            }
+        })
         res.status(201).send(allGenres)
 
     } catch (error) {
@@ -72,7 +100,11 @@ export const deleteGenreById = async (req: Request, res: Response) => {
     const { genreId } = req.params;
     try {
 
-        const allGenres = await GenreModel.findByIdAndDelete({ _id: genreId })
+        await prisma.genre.delete({
+            where: {
+                id: genreId
+            }
+        })
         res.status(204).send()
 
     } catch (error) {

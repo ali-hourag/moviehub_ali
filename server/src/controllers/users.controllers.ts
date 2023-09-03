@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import UserModel from "../model/user.model";
+import prisma from "../db/clientPrisma";
 
 //---------------- CREATE USER ----------------
 export const createUser = async (req: Request, res: Response) => {
@@ -12,10 +12,12 @@ export const createUser = async (req: Request, res: Response) => {
         }
 
         // Create new user
-        const newUser = await UserModel.create({
-            name,
-            email,
-            password
+        const newUser = await prisma.user.create({
+            data: {
+                name,
+                email,
+                password
+            }
         });
 
         res.status(201).send(newUser);
@@ -29,7 +31,17 @@ export const createUser = async (req: Request, res: Response) => {
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
 
-        const allUsers = await UserModel.find();
+        const allUsers = await prisma.user.findMany({
+            include: {
+                movies: {
+                    select: {
+                        id: true,
+                        name: true,
+                        year: true
+                    }
+                }
+            }
+        });
         res.status(200).send(allUsers);
 
     } catch (error) {
@@ -42,7 +54,19 @@ export const getUserById = async (req: Request, res: Response) => {
     const { userId } = req.params;
     try {
 
-        const user = await UserModel.findById({ _id: userId }).populate("movies");
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }, include: {
+                movies: {
+                    select: {
+                        id: true,
+                        name: true,
+                        year: true
+                    }
+                }
+            }
+        });
         if (!user) {
             res.status(400).send({ error: "User non-existent." });
             return;
@@ -60,9 +84,16 @@ export const updateUser = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
     try {
 
-        const user = await UserModel.findByIdAndUpdate({ _id: userId }, {
-            $set: { name: name, email: email, password: password }
-        }, { new: true });
+        const user = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                name,
+                email,
+                password
+            }
+        });
         res.status(201).send(user);
 
     } catch (error) {
@@ -75,7 +106,11 @@ export const deleteUserById = async (req: Request, res: Response) => {
     const { userId } = req.params;
     try {
 
-        await UserModel.findByIdAndDelete({ _id: userId });
+        await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        });
         res.status(204).send();
 
     } catch (error) {
