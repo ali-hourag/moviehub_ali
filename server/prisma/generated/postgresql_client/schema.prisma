@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "./generated/postgresql_client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// Create models to map to the tables on database
+// User has a one to many relationship with Movie
+// Movie has a one to many relationship with Genre
+model User {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String   @unique
+    password  String
+    movies    Movie[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Movie {
+    id          Int      @id @default(autoincrement())
+    name        String
+    year        Int
+    posterImage String
+    score       Float
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    // If movie is eliminated, then movie will be eliminated from User array and the Genre array
+    User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      Int?
+    Genre       Genre?   @relation(fields: [genre], references: [name], onDelete: Cascade)
+    genre       String
+}
+
+model Genre {
+    id        Int      @id @default(autoincrement())
+    name      String   @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    movies    Movie[]
+}

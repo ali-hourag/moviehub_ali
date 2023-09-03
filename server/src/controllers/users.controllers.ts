@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
-import prisma from "../db/clientPrisma";
+import { prismaClient } from "../db/clientPrisma";
+import { convertToType } from "../helpers/utils";
+
 
 //---------------- CREATE USER ----------------
 export const createUser = async (req: Request, res: Response) => {
@@ -12,7 +14,7 @@ export const createUser = async (req: Request, res: Response) => {
         }
 
         // Create new user
-        const newUser = await prisma.user.create({
+        const newUser = await prismaClient.user.create({
             data: {
                 name,
                 email,
@@ -33,7 +35,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
         // include so that User includes the movies that has created and shows
         // id, name and year
-        const allUsers = await prisma.user.findMany({
+        const allUsers = await prismaClient.user.findMany({
             include: {
                 movies: {
                     select: {
@@ -56,9 +58,9 @@ export const getUserById = async (req: Request, res: Response) => {
     const { userId } = req.params;
     try {
 
-        const user = await prisma.user.findUnique({
+        const user = await prismaClient.user.findUnique({
             where: {
-                id: userId
+                id: convertToType(userId)
             }, include: {
                 movies: {
                     select: {
@@ -86,9 +88,9 @@ export const updateUser = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
     try {
 
-        const user = await prisma.user.update({
+        const user = await prismaClient.user.update({
             where: {
-                id: userId
+                id: convertToType(userId)
             },
             data: {
                 name,
@@ -108,9 +110,9 @@ export const deleteUserById = async (req: Request, res: Response) => {
     const { userId } = req.params;
     try {
 
-        await prisma.user.delete({
+        await prismaClient.user.delete({
             where: {
-                id: userId
+                id: convertToType(userId)
             }
         });
         res.status(204).send();

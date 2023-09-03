@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import prisma from "../db/clientPrisma";
+import { prismaClient } from "../db/clientPrisma";
+import { convertToType } from "../helpers/utils";
 
 //---------------- CREATE GENRE ----------------
 export const createGenre = async (req: Request, res: Response) => {
@@ -12,7 +13,7 @@ export const createGenre = async (req: Request, res: Response) => {
             return;
         }
 
-        const newGenre = await prisma.genre.create({ data: { name } });
+        const newGenre = await prismaClient.genre.create({ data: { name } });
         res.status(201).send(newGenre)
 
     } catch (error) {
@@ -26,9 +27,9 @@ export const getGenreById = async (req: Request, res: Response) => {
 
     try {
 
-        const genre = await prisma.genre.findUnique({
+        const genre = await prismaClient.genre.findUnique({
             where: {
-                id: genreId
+                id: convertToType(genreId)
             },
             include: {
                 movies: {
@@ -56,7 +57,7 @@ export const getAllGenres = async (req: Request, res: Response) => {
 
     try {
 
-        const allGenres = await prisma.genre.findMany({
+        const allGenres = await prismaClient.genre.findMany({
             include: {
                 movies: {
                     select: {
@@ -80,9 +81,9 @@ export const updateGenre = async (req: Request, res: Response) => {
     const { name } = req.body;
     try {
 
-        const allGenres = await prisma.genre.update({
+        const allGenres = await prismaClient.genre.update({
             where: {
-                id: genreId
+                id: convertToType(genreId)
             },
             data: {
                 name
@@ -100,9 +101,9 @@ export const deleteGenreById = async (req: Request, res: Response) => {
     const { genreId } = req.params;
     try {
 
-        await prisma.genre.delete({
+        await prismaClient.genre.delete({
             where: {
-                id: genreId
+                id: convertToType(genreId)
             }
         })
         res.status(204).send()

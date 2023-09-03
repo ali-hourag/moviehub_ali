@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import prisma from "../db/clientPrisma";
+import { prismaClient } from "../db/clientPrisma";
+import { convertToType } from "../helpers/utils";
 
 //---------------- CREATE MOVIE ----------------
 export const createMovie = async (req: Request, res: Response) => {
@@ -13,7 +14,7 @@ export const createMovie = async (req: Request, res: Response) => {
         }
 
         // Connect with User and Genre so that everything is updated.
-        const newMovie = await prisma.movie.create({
+        const newMovie = await prismaClient.movie.create({
             data: {
                 name,
                 year,
@@ -21,7 +22,7 @@ export const createMovie = async (req: Request, res: Response) => {
                 score,
                 User: {
                     connect: {
-                        id: userId
+                        id: convertToType(userId)
                     }
                 },
                 Genre: {
@@ -43,7 +44,7 @@ export const createMovie = async (req: Request, res: Response) => {
 export const getAllMovies = async (req: Request, res: Response) => {
     try {
 
-        const allMovies = await prisma.movie.findMany()
+        const allMovies = await prismaClient.movie.findMany()
         res.status(200).send(allMovies);
 
     } catch (error) {
@@ -56,9 +57,9 @@ export const getMovieById = async (req: Request, res: Response) => {
     const { movieId } = req.params;
     try {
 
-        const movie = await prisma.movie.findUnique({
+        const movie = await prismaClient.movie.findUnique({
             where: {
-                id: movieId
+                id: convertToType(movieId)
             }
         })
         if (!movie) {
@@ -78,9 +79,9 @@ export const updateMovie = async (req: Request, res: Response) => {
     try {
 
 
-        const updatedMovie = await prisma.movie.update({
+        const updatedMovie = await prismaClient.movie.update({
             where: {
-                id: movieId
+                id: convertToType(movieId)
             },
             data: {
                 name,
@@ -108,9 +109,9 @@ export const updateMovieGenre = async (req: Request, res: Response) => {
     try {
 
 
-        const updatedMovie = await prisma.movie.update({
+        const updatedMovie = await prismaClient.movie.update({
             where: {
-                id: movieId
+                id: convertToType(movieId)
             },
             data: {
                 Genre: {
@@ -132,9 +133,9 @@ export const deleteMovieById = async (req: Request, res: Response) => {
     const { movieId } = req.params;
     try {
 
-        await prisma.movie.delete({
+        await prismaClient.movie.delete({
             where: {
-                id: movieId
+                id: convertToType(movieId)
             }
         })
         res.status(204).send();
