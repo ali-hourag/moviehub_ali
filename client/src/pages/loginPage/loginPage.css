@@ -1,0 +1,30 @@
+.login-btn {
+    border-style: none;
+    position: absolute;
+    top: 82%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 19.75rem;
+    height: 3.9375rem;
+    border-radius: 0.9375rem;
+    text-align: center;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 600;
+    background: #98ceca;
+    color: #000;
+}
+
+.login-container {
+    background-color: #F5F5DC;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.moviehub-logo {
+    width: 15rem;
+    height: 15rem;
+}
