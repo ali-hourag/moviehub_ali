@@ -21,6 +21,12 @@
     position: relative;
 }
 
+.edit-movie-btns {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
 .card-edit-icon {
     position: absolute;
     width: 1.5rem;

@@ -1,8 +1,17 @@
 import { useForm } from "react-hook-form"
 import "./addMovie.css"
+import { useEffect, useState } from "react";
+import { Genre } from "../../types/genresTypes";
+import { createMovie, getAllGenres } from "../../api/fetchApi";
+import { Movie } from "../../context/UserContextProvider";
+import { useUserContext } from "../../utils/hooks/useUserContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const AddMovie = () => {
-    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm({
+    const [genres, setGenres] = useState<Genre[]>([]);
+    const { currentUser } = useUserContext();
+    const { getAccessTokenSilently } = useAuth0();
+    const { register, handleSubmit, formState: { errors }, watch } = useForm({
         defaultValues: {
             name: "",
             score: "",
@@ -12,10 +21,40 @@ export const AddMovie = () => {
         }
     })
 
-    const movieGenres: string[] = ["action", "comedy", "drama", "fantasy", "horror", "musicals", "mystery",
-        "romance", "science fiction", "sports", "thriller", "western"]
+    useEffect(() => {
+        (async function getAllMoviesData() {
+            const genresFetched = await getAllGenres();
+            setGenres(genresFetched)
+        }())
+    }, [])
     const submitForm = () => {
-        console.log("Submit form");
+        //Upload image
+        const name = watch("name")
+        const year = parseInt(watch("year"))
+        const score = parseInt(watch("score"))
+        const genre = watch("genre")
+
+        const posterImage = watch("imageUrl")[0]
+
+        const newMovie: Movie = {
+            name: name,
+            year: year,
+            score: score,
+            posterImage: posterImage,
+            genre: genre
+        };
+
+        (async function fetchUpdates() {
+            //Coger user by Id and send id movie and genre and it will be created
+            const userId = currentUser?.id;
+            console.log(userId);
+            if (userId) {
+                console.log(userId);
+                console.log(newMovie);
+                const movieCreated = await createMovie(getAccessTokenSilently, userId, newMovie)
+                console.log(movieCreated);
+            }
+        }())
     }
     return (
         <div className="addmovie-container_div">
@@ -91,8 +130,8 @@ export const AddMovie = () => {
                         })}
                     >
                         <option value="" disabled hidden>Select a genre for your song</option>
-                        {movieGenres.map((genre, index) => (
-                            <option value={genre} key={index}>{genre}</option>
+                        {genres && genres.map((genre, index) => (
+                            <option value={genre.name} key={index}>{genre.name}</option>
                         ))}
                     </select>
                     {errors.genre && <p className="addmovie-form-error">{errors.genre.message}</p>}

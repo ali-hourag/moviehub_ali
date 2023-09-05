@@ -2,14 +2,51 @@
 
 import { AiTwotoneEdit } from "react-icons/ai";
 import "./homePage.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { createUser, deleteMovie, getAllGenres, getUserByEmail, updateMovie, updateMovieGenre } from "../../api/fetchApi";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useUserContext } from "../../utils/hooks/useUserContext";
+import { Movie, UserType } from "../../context/UserContextProvider";
+import { Genre } from "../../types/genresTypes";
 
 export const HomePage = () => {
 
 
-    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm({
+    const { getAccessTokenSilently } = useAuth0();
+    const { user } = useAuth0();
+    const { currentUser, setCurrentLoggedUser } = useUserContext();
+    const [genres, setGenres] = useState<Genre[]>([]);
+    const [editMovie, setEditMovie] = useState<boolean>(false);
+    const [movie, setMovie] = useState<Movie>();
+
+    useEffect(() => {
+        (async function getUser() {
+            if (user?.email) {
+                const userData = await getUserByEmail(getAccessTokenSilently, user?.email)
+                const fetchStatus = userData[0].status
+                const userFetched = userData[1] as UserType;
+                if (fetchStatus === 200) {
+                    //Already existing so, just upload userContext with it
+                    setCurrentLoggedUser(userFetched);
+                } else if (fetchStatus === 400) {
+                    const newUser = {
+                        name: user.name,
+                        email: user.email,
+                        password: user.email
+                    }
+                    // Then it does not exist, and has to be created
+                    const userCreated = await createUser(newUser);
+                    setCurrentLoggedUser(userCreated);
+
+                }
+            }
+        }())
+    }, [user])
+
+
+
+    const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         defaultValues: {
             name: "",
             score: "",
@@ -19,37 +56,76 @@ export const HomePage = () => {
         }
     })
 
-    const [editMovie, setEditMovie] = useState<boolean>(false);
 
-    const editMovieById = (movieId: string) => {
-        console.log("edit movie");
+
+    const editMovieClicked = (movieToEdit: Movie) => {
+        setValue("name", movieToEdit.name);
+        if (movieToEdit.score) setValue("score", movieToEdit.score.toString());
+        if (movieToEdit.genre) setValue("genre", movieToEdit.genre);
+        setMovie(movieToEdit)
         setEditMovie(!editMovie);
     }
 
-    const movieGenres: string[] = ["action", "comedy", "drama", "fantasy", "horror", "musicals", "mystery",
-        "romance", "science fiction", "sports", "thriller", "western"]
     const submitForm = () => {
-        console.log("Submit form");
+        //Upload image
+        const name = watch("name")
+        const year = parseInt(watch("year"))
+        const score = parseInt(watch("score"))
+        const genre = watch("genre");
+        // const posterImage = watch("imageUrl")
+        const posterImage = watch("imageUrl")
+        const updatesMovie: Movie = {
+            name: name,
+            id: movie?.id,
+            year: year,
+            score: score,
+            posterImage: posterImage,
+            genre: genre
+        };
+
+        (async function fetchUpdates() {
+            console.log(updatesMovie);
+            const newMovie = await updateMovie(getAccessTokenSilently, updatesMovie)
+            const newGenre: Genre = {
+                name: watch("genre")
+            }
+            console.log(newMovie);
+            const newMovieGenre = await updateMovieGenre(getAccessTokenSilently, newMovie, newGenre)
+            console.log(newMovieGenre);
+        }())
     }
 
     const handleBackBtn = () => {
         setEditMovie(!editMovie);
     }
+    const removeMovie = (movieId: number | undefined) => {
+        (async function removeMovies() {
+            if (movieId) {
+                await deleteMovie(getAccessTokenSilently, movieId);
+            }
 
-    const array = [1, 2, 3, 4, 5, 6]
+        }())
+    }
+
+    useEffect(() => {
+        (async function getAllMoviesData() {
+            const genresFetched = await getAllGenres();
+            setGenres(genresFetched)
+        }())
+    }, [])
 
 
     return (
         <div className="homepage-container">
-            {!editMovie && array.map(a => (
-                <div className="card-movie_div" key={a}>
-                    <AiTwotoneEdit className="card-edit-icon" onClick={() => editMovieById("h")} />
-                    <img src="https://highxtar.com/wp-content/uploads/2023/01/Thumb-H-Top-Boy-2023.jpg" className="photo-movie_img" />
+            {!editMovie && currentUser?.movies && currentUser.movies.map((movie, index) => (
+                <div className="card-movie_div" key={index}>
+                    <AiTwotoneEdit className="card-edit-icon" onClick={() => editMovieClicked(movie)} />
+                    <img src={movie.posterImage} className="photo-movie_img" />
                     <div className="movie-details-container_div">
-                        <p className="movie-details_p">Name: Top boy</p>
-                        <p className="movie-details_p">Score: 4/5</p>
-                        <p className="movie-details_p">Year: 2018</p>
-                        <p className="movie-details_p">Genre: action</p>
+                        <p className="movie-details_p">Name: {movie.name}</p>
+                        <p className="movie-details_p">Score: {movie.score}/5</p>
+                        <p className="movie-details_p">Year: {movie.year}</p>
+                        <p className="movie-details_p">Genre: {movie?.genre}</p>
                     </div>
 
                 </div>
@@ -62,6 +138,7 @@ export const HomePage = () => {
                                 Name:
                             </label>
                             <input id="addmovie-name"
+
                                 className="addmovie-name_input addmovie_input" type="text"
                                 {...register("name", {
                                     required: {
@@ -102,6 +179,7 @@ export const HomePage = () => {
                                 Year:
                             </label>
                             <input id="addmovie-year"
+                                value={movie?.year}
                                 className="addmovie-year_input addmovie_input"
                                 type="number" min="1895" max="2023"
                                 {...register("year", {
@@ -127,8 +205,8 @@ export const HomePage = () => {
                                 })}
                             >
                                 <option value="" disabled hidden>Select a genre for your song</option>
-                                {movieGenres.map((genre, index) => (
-                                    <option value={genre} key={index}>{genre}</option>
+                                {genres && genres.map((genre, index) => (
+                                    <option value={genre.name} key={index}>{genre.name}</option>
                                 ))}
                             </select>
                             {errors.genre && <p className="addmovie-form-error">{errors.genre.message}</p>}
@@ -149,11 +227,12 @@ export const HomePage = () => {
                                     }
                                 })}
                             />
-                            <img className="movie-current_img" src="https://highxtar.com/wp-content/uploads/2023/01/Thumb-H-Top-Boy-2023.jpg" />
+                            <img className="movie-current_img" src={movie?.posterImage} />
                             {errors.imageUrl && <p className="addmovie-form-error">{errors.imageUrl.message}</p>}
                         </div>
-                        <div className="addmovie-entry-container">
+                        <div className="addmovie-entry-container edit-movie-btns">
                             <button className="add-movie-submit_btn" type="submit">Upload</button>
+                            <button className="add-movie-submit_btn" onClick={() => removeMovie(movie?.id)}>REMOVE</button>
                         </div>
                     </form>
                     <button className="home-back_btn" onClick={handleBackBtn}>GO BACK</button>
