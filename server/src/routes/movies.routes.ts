@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { createMovie, deleteMovieById, getAllMovies, getMovieById, updateMovie, updateMovieGenre } from '../controllers/movies.controllers';
 import { checkMovieData } from '../middleware/checkMovieData.middleware';
+import { checkJwtMiddleware } from '../middleware/checkJwt.middleware';
 
 const MoviesRouter: Router = Router();
 

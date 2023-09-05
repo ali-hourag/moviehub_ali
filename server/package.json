@@ -24,7 +24,10 @@
   "dependencies": {
     "@prisma/client": "^5.2.0",
     "@types/mongoose": "^5.11.97",
+    "cloudinary": "^1.40.0",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-oauth2-jwt-bearer": "^1.5.0",
     "mongoose": "^7.5.0",
     "morgan": "^1.10.0",
     "prisma": "^5.2.0",
