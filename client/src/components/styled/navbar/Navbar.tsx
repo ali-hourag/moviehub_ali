@@ -5,32 +5,43 @@ import { RiAccountPinCircleLine } from 'react-icons/ri';
 import { useLocation } from "react-router-dom";
 import "./navbar.css"
 import { useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation().pathname.slice(1);
+    // const location = useLocation().pathname.split("/")[1];
+    const { logout } = useAuth0();
 
 
     const handleIconsClicked = (path: string) => {
 
         switch (path) {
-            case 'home': navigate('home');
+            case 'moviehub': navigate('/moviehub');
                 break
             case 'addMovie': navigate('addMovie');
                 break
             case 'profile': navigate('profile')
                 break
-            case '/': navigate('/')
+            case '/': logout();
                 break
 
         }
     }
 
-    const navbarPaths = ["home", "addMovie", "profile", "/"]
+    const navbarPaths = ["moviehub", "addMovie", "profile", "/"]
 
     useEffect(() => {
-        const button = document.querySelector(`#${location}`) as HTMLInputElement;
-        button.checked = true;
+        let newLocation = location;
+        if (location[location.length - 1] === "/") {
+            newLocation = location.slice(0, -1);
+        }
+        if (newLocation.includes("addMovie") || newLocation.includes("profile")) {
+            newLocation = newLocation.split("/")[1];
+        }
+        const button = document.querySelector(`#${newLocation}`) as HTMLInputElement;
+        if (button) button.checked = true;
+
     }, [location])
 
     return (
