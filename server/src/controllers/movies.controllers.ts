@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import { prismaClient } from "../db/clientPrisma";
 import { convertToType } from "../helpers/utils";
+import { uploadImage } from "../utils/cloudinary";
 
 //---------------- CREATE MOVIE ----------------
-export const createMovie = async (req: Request, res: Response) => {
+export const createMovie = async (req: any, res: any) => {
     const { userId, genre } = req.params
-    const { name, year, posterImage, score } = req.body
+    const { name, year, score } = req.body
+
+
     try {
 
         if (!name || !year) {
@@ -13,13 +16,17 @@ export const createMovie = async (req: Request, res: Response) => {
             return;
         }
 
+        const upload = await uploadImage((req.files as any).posterImage.tempFilePath);
+
+
+
         // Connect with User and Genre so that everything is updated.
         const newMovie = await prismaClient.movie.create({
             data: {
-                name,
-                year,
-                posterImage,
-                score,
+                name: name,
+                year: parseInt(year),
+                posterImage: upload.secure_url,
+                score: parseFloat(score),
                 User: {
                     connect: {
                         id: convertToType(userId)
@@ -36,7 +43,7 @@ export const createMovie = async (req: Request, res: Response) => {
         res.status(201).send(newMovie)
 
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(console.log(error))
     }
 }
 
@@ -74,9 +81,11 @@ export const getMovieById = async (req: Request, res: Response) => {
 }
 //---------------- UPDATE MOVIE ----------------
 export const updateMovie = async (req: Request, res: Response) => {
-    const { name, year, posterImage, score } = req.body
+    const { name, year, score } = req.body
     const { movieId } = req.params
     try {
+
+        // const upload = await uploadImage((req.files as any).posterImage.tempFilePath);
 
 
         const updatedMovie = await prismaClient.movie.update({
@@ -84,10 +93,9 @@ export const updateMovie = async (req: Request, res: Response) => {
                 id: convertToType(movieId)
             },
             data: {
-                name,
-                year,
-                posterImage,
-                score
+                name: name,
+                year: parseInt(year),
+                score: parseInt(score),
             }
         })
 

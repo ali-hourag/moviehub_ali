@@ -5,11 +5,11 @@ import { checkJwtMiddleware } from '../middleware/checkJwt.middleware';
 
 const MoviesRouter: Router = Router();
 
-MoviesRouter.post("/:userId/:genre", checkMovieData, createMovie)
-    .get("/", getAllMovies)
-    .get("/:movieId", getMovieById)
-    .patch("/:movieId", checkMovieData, updateMovie)
-    .patch("/:movieId/:genre", updateMovieGenre)
-    .delete("/:movieId", deleteMovieById)
+MoviesRouter.post("/:userId/:genre", checkJwtMiddleware, checkMovieData, createMovie)
+    .get("/", checkJwtMiddleware, getAllMovies)
+    .get("/:movieId", checkJwtMiddleware, getMovieById)
+    .patch("/:movieId", checkJwtMiddleware, checkMovieData, updateMovie)
+    .patch("/:movieId/:genre", checkJwtMiddleware, updateMovieGenre)
+    .delete("/:movieId", checkJwtMiddleware, deleteMovieById)
 
 export default MoviesRouter;

@@ -6,9 +6,10 @@ import { convertToType } from "../helpers/utils";
 //---------------- CREATE USER ----------------
 export const createUser = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
+    console.log(name, email);
     try {
         // Make sure all required fields are available
-        if (!name || !email || !password) {
+        if (!name || !email) {
             res.status(400).send({ error: "Missing required fields." });
             return
         }
@@ -41,7 +42,10 @@ export const getAllUsers = async (req: Request, res: Response) => {
                     select: {
                         id: true,
                         name: true,
-                        year: true
+                        year: true,
+                        score: true,
+                        posterImage: true,
+                        genre: true
                     }
                 }
             }
@@ -54,6 +58,37 @@ export const getAllUsers = async (req: Request, res: Response) => {
 }
 
 //---------------- CREATE USER BY ID ----------------
+export const getUserByEmail = async (req: Request, res: Response) => {
+    const { userEmail } = req.params;
+    try {
+
+        const user = await prismaClient.user.findUnique({
+            where: {
+                email: userEmail
+            }, include: {
+                movies: {
+                    select: {
+                        id: true,
+                        name: true,
+                        year: true,
+                        score: true,
+                        posterImage: true,
+                        genre: true
+                    }
+                }
+            }
+        });
+        if (!user) {
+            res.status(400).send({ error: "User non-existent." });
+            return;
+        }
+        res.status(200).send(user);
+
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
 export const getUserById = async (req: Request, res: Response) => {
     const { userId } = req.params;
     try {
@@ -106,13 +141,13 @@ export const updateUser = async (req: Request, res: Response) => {
 }
 
 //---------------- DELETE USER ----------------
-export const deleteUserById = async (req: Request, res: Response) => {
-    const { userId } = req.params;
+export const deleteUserByEmail = async (req: Request, res: Response) => {
+    const { userEmail } = req.params;
     try {
 
         await prismaClient.user.delete({
             where: {
-                id: convertToType(userId)
+                email: userEmail
             }
         });
         res.status(204).send();
