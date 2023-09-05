@@ -6,6 +6,7 @@ import { createMovie, getAllGenres } from "../../api/fetchApi";
 import { Movie } from "../../context/UserContextProvider";
 import { useUserContext } from "../../utils/hooks/useUserContext";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Toaster, toast } from "react-hot-toast";
 
 export const AddMovie = () => {
     const [genres, setGenres] = useState<Genre[]>([]);
@@ -55,9 +56,14 @@ export const AddMovie = () => {
                 console.log(movieCreated);
             }
         }())
+        toast.success('Successfully uploaded!')
     }
     return (
         <div className="addmovie-container_div">
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
             <h3 className="addmovie-title">ADD MOVIE</h3>
             <form className="addmovie-form" onSubmit={handleSubmit(submitForm)}>
                 <div className="addmovie-entry-container">
