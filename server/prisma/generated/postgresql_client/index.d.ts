@@ -1054,6 +1054,40 @@ export namespace Prisma {
 
 
   /**
+   * Count Type MovieCountOutputType
+   */
+
+  export type MovieCountOutputType = {
+    genres: number
+  }
+
+  export type MovieCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    genres?: boolean | MovieCountOutputTypeCountGenresArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * MovieCountOutputType without action
+   */
+  export type MovieCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MovieCountOutputType
+     */
+    select?: MovieCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * MovieCountOutputType without action
+   */
+  export type MovieCountOutputTypeCountGenresArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: GenreWhereInput
+  }
+
+
+
+  /**
    * Count Type GenreCountOutputType
    */
 
@@ -2109,10 +2143,9 @@ export namespace Prisma {
     year: number | null
     posterImage: string | null
     score: number | null
+    userId: number | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: number | null
-    genre: string | null
   }
 
   export type MovieMaxAggregateOutputType = {
@@ -2121,10 +2154,9 @@ export namespace Prisma {
     year: number | null
     posterImage: string | null
     score: number | null
+    userId: number | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: number | null
-    genre: string | null
   }
 
   export type MovieCountAggregateOutputType = {
@@ -2133,10 +2165,9 @@ export namespace Prisma {
     year: number
     posterImage: number
     score: number
+    userId: number
     createdAt: number
     updatedAt: number
-    userId: number
-    genre: number
     _all: number
   }
 
@@ -2161,10 +2192,9 @@ export namespace Prisma {
     year?: true
     posterImage?: true
     score?: true
+    userId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
-    genre?: true
   }
 
   export type MovieMaxAggregateInputType = {
@@ -2173,10 +2203,9 @@ export namespace Prisma {
     year?: true
     posterImage?: true
     score?: true
+    userId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
-    genre?: true
   }
 
   export type MovieCountAggregateInputType = {
@@ -2185,10 +2214,9 @@ export namespace Prisma {
     year?: true
     posterImage?: true
     score?: true
+    userId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
-    genre?: true
     _all?: true
   }
 
@@ -2284,10 +2312,9 @@ export namespace Prisma {
     year: number
     posterImage: string
     score: number
+    userId: number
     createdAt: Date
     updatedAt: Date
-    userId: number | null
-    genre: string
     _count: MovieCountAggregateOutputType | null
     _avg: MovieAvgAggregateOutputType | null
     _sum: MovieSumAggregateOutputType | null
@@ -2315,12 +2342,12 @@ export namespace Prisma {
     year?: boolean
     posterImage?: boolean
     score?: boolean
+    userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    genre?: boolean
-    User?: boolean | Movie$UserArgs<ExtArgs>
-    Genre?: boolean | Movie$GenreArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    genres?: boolean | Movie$genresArgs<ExtArgs>
+    _count?: boolean | MovieCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["movie"]>
 
   export type MovieSelectScalar = {
@@ -2329,23 +2356,23 @@ export namespace Prisma {
     year?: boolean
     posterImage?: boolean
     score?: boolean
+    userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    genre?: boolean
   }
 
   export type MovieInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    User?: boolean | Movie$UserArgs<ExtArgs>
-    Genre?: boolean | Movie$GenreArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    genres?: boolean | Movie$genresArgs<ExtArgs>
+    _count?: boolean | MovieCountOutputTypeDefaultArgs<ExtArgs>
   }
 
 
   export type $MoviePayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     name: "Movie"
     objects: {
-      User: Prisma.$UserPayload<ExtArgs> | null
-      Genre: Prisma.$GenrePayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs>
+      genres: Prisma.$GenrePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetResult<{
       id: number
@@ -2353,10 +2380,9 @@ export namespace Prisma {
       year: number
       posterImage: string
       score: number
+      userId: number
       createdAt: Date
       updatedAt: Date
-      userId: number | null
-      genre: string
     }, ExtArgs["result"]["movie"]>
     composites: {}
   }
@@ -2722,9 +2748,9 @@ export namespace Prisma {
   export interface Prisma__MovieClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
-    User<T extends Movie$UserArgs<ExtArgs> = {}>(args?: Subset<T, Movie$UserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
 
-    Genre<T extends Movie$GenreArgs<ExtArgs> = {}>(args?: Subset<T, Movie$GenreArgs<ExtArgs>>): Prisma__GenreClient<$Result.GetResult<Prisma.$GenrePayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+    genres<T extends Movie$genresArgs<ExtArgs> = {}>(args?: Subset<T, Movie$genresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GenrePayload<ExtArgs>, T, 'findMany'> | Null>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2759,10 +2785,9 @@ export namespace Prisma {
     readonly year: FieldRef<"Movie", 'Int'>
     readonly posterImage: FieldRef<"Movie", 'String'>
     readonly score: FieldRef<"Movie", 'Float'>
+    readonly userId: FieldRef<"Movie", 'Int'>
     readonly createdAt: FieldRef<"Movie", 'DateTime'>
     readonly updatedAt: FieldRef<"Movie", 'DateTime'>
-    readonly userId: FieldRef<"Movie", 'Int'>
-    readonly genre: FieldRef<"Movie", 'String'>
   }
     
 
@@ -3075,25 +3100,9 @@ export namespace Prisma {
 
 
   /**
-   * Movie.User
+   * Movie.genres
    */
-  export type Movie$UserArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-
-  /**
-   * Movie.Genre
-   */
-  export type Movie$GenreArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+  export type Movie$genresArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Genre
      */
@@ -3103,6 +3112,11 @@ export namespace Prisma {
      */
     include?: GenreInclude<ExtArgs> | null
     where?: GenreWhereInput
+    orderBy?: GenreOrderByWithRelationInput | GenreOrderByWithRelationInput[]
+    cursor?: GenreWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GenreScalarFieldEnum | GenreScalarFieldEnum[]
   }
 
 
@@ -4118,10 +4132,9 @@ export namespace Prisma {
     year: 'year',
     posterImage: 'posterImage',
     score: 'score',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
     userId: 'userId',
-    genre: 'genre'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type MovieScalarFieldEnum = (typeof MovieScalarFieldEnum)[keyof typeof MovieScalarFieldEnum]
@@ -4151,14 +4164,6 @@ export namespace Prisma {
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -4296,12 +4301,11 @@ export namespace Prisma {
     year?: IntFilter<"Movie"> | number
     posterImage?: StringFilter<"Movie"> | string
     score?: FloatFilter<"Movie"> | number
+    userId?: IntFilter<"Movie"> | number
     createdAt?: DateTimeFilter<"Movie"> | Date | string
     updatedAt?: DateTimeFilter<"Movie"> | Date | string
-    userId?: IntNullableFilter<"Movie"> | number | null
-    genre?: StringFilter<"Movie"> | string
-    User?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    Genre?: XOR<GenreNullableRelationFilter, GenreWhereInput> | null
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    genres?: GenreListRelationFilter
   }
 
   export type MovieOrderByWithRelationInput = {
@@ -4310,12 +4314,11 @@ export namespace Prisma {
     year?: SortOrder
     posterImage?: SortOrder
     score?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrderInput | SortOrder
-    genre?: SortOrder
-    User?: UserOrderByWithRelationInput
-    Genre?: GenreOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    genres?: GenreOrderByRelationAggregateInput
   }
 
   export type MovieWhereUniqueInput = Prisma.AtLeast<{
@@ -4327,12 +4330,11 @@ export namespace Prisma {
     year?: IntFilter<"Movie"> | number
     posterImage?: StringFilter<"Movie"> | string
     score?: FloatFilter<"Movie"> | number
+    userId?: IntFilter<"Movie"> | number
     createdAt?: DateTimeFilter<"Movie"> | Date | string
     updatedAt?: DateTimeFilter<"Movie"> | Date | string
-    userId?: IntNullableFilter<"Movie"> | number | null
-    genre?: StringFilter<"Movie"> | string
-    User?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    Genre?: XOR<GenreNullableRelationFilter, GenreWhereInput> | null
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    genres?: GenreListRelationFilter
   }, "id">
 
   export type MovieOrderByWithAggregationInput = {
@@ -4341,10 +4343,9 @@ export namespace Prisma {
     year?: SortOrder
     posterImage?: SortOrder
     score?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrderInput | SortOrder
-    genre?: SortOrder
     _count?: MovieCountOrderByAggregateInput
     _avg?: MovieAvgOrderByAggregateInput
     _max?: MovieMaxOrderByAggregateInput
@@ -4361,10 +4362,9 @@ export namespace Prisma {
     year?: IntWithAggregatesFilter<"Movie"> | number
     posterImage?: StringWithAggregatesFilter<"Movie"> | string
     score?: FloatWithAggregatesFilter<"Movie"> | number
+    userId?: IntWithAggregatesFilter<"Movie"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Movie"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Movie"> | Date | string
-    userId?: IntNullableWithAggregatesFilter<"Movie"> | number | null
-    genre?: StringWithAggregatesFilter<"Movie"> | string
   }
 
   export type GenreWhereInput = {
@@ -4490,8 +4490,8 @@ export namespace Prisma {
     score: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    User?: UserCreateNestedOneWithoutMoviesInput
-    Genre?: GenreCreateNestedOneWithoutMoviesInput
+    user: UserCreateNestedOneWithoutMoviesInput
+    genres?: GenreCreateNestedManyWithoutMoviesInput
   }
 
   export type MovieUncheckedCreateInput = {
@@ -4500,10 +4500,10 @@ export namespace Prisma {
     year: number
     posterImage: string
     score: number
+    userId: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId?: number | null
-    genre: string
+    genres?: GenreUncheckedCreateNestedManyWithoutMoviesInput
   }
 
   export type MovieUpdateInput = {
@@ -4513,8 +4513,8 @@ export namespace Prisma {
     score?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User?: UserUpdateOneWithoutMoviesNestedInput
-    Genre?: GenreUpdateOneWithoutMoviesNestedInput
+    user?: UserUpdateOneRequiredWithoutMoviesNestedInput
+    genres?: GenreUpdateManyWithoutMoviesNestedInput
   }
 
   export type MovieUncheckedUpdateInput = {
@@ -4523,10 +4523,10 @@ export namespace Prisma {
     year?: IntFieldUpdateOperationsInput | number
     posterImage?: StringFieldUpdateOperationsInput | string
     score?: FloatFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: NullableIntFieldUpdateOperationsInput | number | null
-    genre?: StringFieldUpdateOperationsInput | string
+    genres?: GenreUncheckedUpdateManyWithoutMoviesNestedInput
   }
 
   export type MovieCreateManyInput = {
@@ -4535,10 +4535,9 @@ export namespace Prisma {
     year: number
     posterImage: string
     score: number
+    userId: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId?: number | null
-    genre: string
   }
 
   export type MovieUpdateManyMutationInput = {
@@ -4556,17 +4555,16 @@ export namespace Prisma {
     year?: IntFieldUpdateOperationsInput | number
     posterImage?: StringFieldUpdateOperationsInput | string
     score?: FloatFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: NullableIntFieldUpdateOperationsInput | number | null
-    genre?: StringFieldUpdateOperationsInput | string
   }
 
   export type GenreCreateInput = {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    movies?: MovieCreateNestedManyWithoutGenreInput
+    movies?: MovieCreateNestedManyWithoutGenresInput
   }
 
   export type GenreUncheckedCreateInput = {
@@ -4574,14 +4572,14 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    movies?: MovieUncheckedCreateNestedManyWithoutGenreInput
+    movies?: MovieUncheckedCreateNestedManyWithoutGenresInput
   }
 
   export type GenreUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    movies?: MovieUpdateManyWithoutGenreNestedInput
+    movies?: MovieUpdateManyWithoutGenresNestedInput
   }
 
   export type GenreUncheckedUpdateInput = {
@@ -4589,7 +4587,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    movies?: MovieUncheckedUpdateManyWithoutGenreNestedInput
+    movies?: MovieUncheckedUpdateManyWithoutGenresNestedInput
   }
 
   export type GenreCreateManyInput = {
@@ -4753,30 +4751,19 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type UserRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
   }
 
-  export type UserNullableRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
+  export type GenreListRelationFilter = {
+    every?: GenreWhereInput
+    some?: GenreWhereInput
+    none?: GenreWhereInput
   }
 
-  export type GenreNullableRelationFilter = {
-    is?: GenreWhereInput | null
-    isNot?: GenreWhereInput | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
+  export type GenreOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type MovieCountOrderByAggregateInput = {
@@ -4785,10 +4772,9 @@ export namespace Prisma {
     year?: SortOrder
     posterImage?: SortOrder
     score?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    genre?: SortOrder
   }
 
   export type MovieAvgOrderByAggregateInput = {
@@ -4804,10 +4790,9 @@ export namespace Prisma {
     year?: SortOrder
     posterImage?: SortOrder
     score?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    genre?: SortOrder
   }
 
   export type MovieMinOrderByAggregateInput = {
@@ -4816,10 +4801,9 @@ export namespace Prisma {
     year?: SortOrder
     posterImage?: SortOrder
     score?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    genre?: SortOrder
   }
 
   export type MovieSumOrderByAggregateInput = {
@@ -4843,22 +4827,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type GenreCountOrderByAggregateInput = {
@@ -4954,10 +4922,16 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type GenreCreateNestedOneWithoutMoviesInput = {
-    create?: XOR<GenreCreateWithoutMoviesInput, GenreUncheckedCreateWithoutMoviesInput>
-    connectOrCreate?: GenreCreateOrConnectWithoutMoviesInput
-    connect?: GenreWhereUniqueInput
+  export type GenreCreateNestedManyWithoutMoviesInput = {
+    create?: XOR<GenreCreateWithoutMoviesInput, GenreUncheckedCreateWithoutMoviesInput> | GenreCreateWithoutMoviesInput[] | GenreUncheckedCreateWithoutMoviesInput[]
+    connectOrCreate?: GenreCreateOrConnectWithoutMoviesInput | GenreCreateOrConnectWithoutMoviesInput[]
+    connect?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+  }
+
+  export type GenreUncheckedCreateNestedManyWithoutMoviesInput = {
+    create?: XOR<GenreCreateWithoutMoviesInput, GenreUncheckedCreateWithoutMoviesInput> | GenreCreateWithoutMoviesInput[] | GenreUncheckedCreateWithoutMoviesInput[]
+    connectOrCreate?: GenreCreateOrConnectWithoutMoviesInput | GenreCreateOrConnectWithoutMoviesInput[]
+    connect?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -4968,73 +4942,75 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type UserUpdateOneWithoutMoviesNestedInput = {
+  export type UserUpdateOneRequiredWithoutMoviesNestedInput = {
     create?: XOR<UserCreateWithoutMoviesInput, UserUncheckedCreateWithoutMoviesInput>
     connectOrCreate?: UserCreateOrConnectWithoutMoviesInput
     upsert?: UserUpsertWithoutMoviesInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMoviesInput, UserUpdateWithoutMoviesInput>, UserUncheckedUpdateWithoutMoviesInput>
   }
 
-  export type GenreUpdateOneWithoutMoviesNestedInput = {
-    create?: XOR<GenreCreateWithoutMoviesInput, GenreUncheckedCreateWithoutMoviesInput>
-    connectOrCreate?: GenreCreateOrConnectWithoutMoviesInput
-    upsert?: GenreUpsertWithoutMoviesInput
-    disconnect?: GenreWhereInput | boolean
-    delete?: GenreWhereInput | boolean
-    connect?: GenreWhereUniqueInput
-    update?: XOR<XOR<GenreUpdateToOneWithWhereWithoutMoviesInput, GenreUpdateWithoutMoviesInput>, GenreUncheckedUpdateWithoutMoviesInput>
+  export type GenreUpdateManyWithoutMoviesNestedInput = {
+    create?: XOR<GenreCreateWithoutMoviesInput, GenreUncheckedCreateWithoutMoviesInput> | GenreCreateWithoutMoviesInput[] | GenreUncheckedCreateWithoutMoviesInput[]
+    connectOrCreate?: GenreCreateOrConnectWithoutMoviesInput | GenreCreateOrConnectWithoutMoviesInput[]
+    upsert?: GenreUpsertWithWhereUniqueWithoutMoviesInput | GenreUpsertWithWhereUniqueWithoutMoviesInput[]
+    set?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+    disconnect?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+    delete?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+    connect?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+    update?: GenreUpdateWithWhereUniqueWithoutMoviesInput | GenreUpdateWithWhereUniqueWithoutMoviesInput[]
+    updateMany?: GenreUpdateManyWithWhereWithoutMoviesInput | GenreUpdateManyWithWhereWithoutMoviesInput[]
+    deleteMany?: GenreScalarWhereInput | GenreScalarWhereInput[]
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type GenreUncheckedUpdateManyWithoutMoviesNestedInput = {
+    create?: XOR<GenreCreateWithoutMoviesInput, GenreUncheckedCreateWithoutMoviesInput> | GenreCreateWithoutMoviesInput[] | GenreUncheckedCreateWithoutMoviesInput[]
+    connectOrCreate?: GenreCreateOrConnectWithoutMoviesInput | GenreCreateOrConnectWithoutMoviesInput[]
+    upsert?: GenreUpsertWithWhereUniqueWithoutMoviesInput | GenreUpsertWithWhereUniqueWithoutMoviesInput[]
+    set?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+    disconnect?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+    delete?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+    connect?: GenreWhereUniqueInput | GenreWhereUniqueInput[]
+    update?: GenreUpdateWithWhereUniqueWithoutMoviesInput | GenreUpdateWithWhereUniqueWithoutMoviesInput[]
+    updateMany?: GenreUpdateManyWithWhereWithoutMoviesInput | GenreUpdateManyWithWhereWithoutMoviesInput[]
+    deleteMany?: GenreScalarWhereInput | GenreScalarWhereInput[]
   }
 
-  export type MovieCreateNestedManyWithoutGenreInput = {
-    create?: XOR<MovieCreateWithoutGenreInput, MovieUncheckedCreateWithoutGenreInput> | MovieCreateWithoutGenreInput[] | MovieUncheckedCreateWithoutGenreInput[]
-    connectOrCreate?: MovieCreateOrConnectWithoutGenreInput | MovieCreateOrConnectWithoutGenreInput[]
-    createMany?: MovieCreateManyGenreInputEnvelope
+  export type MovieCreateNestedManyWithoutGenresInput = {
+    create?: XOR<MovieCreateWithoutGenresInput, MovieUncheckedCreateWithoutGenresInput> | MovieCreateWithoutGenresInput[] | MovieUncheckedCreateWithoutGenresInput[]
+    connectOrCreate?: MovieCreateOrConnectWithoutGenresInput | MovieCreateOrConnectWithoutGenresInput[]
     connect?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
   }
 
-  export type MovieUncheckedCreateNestedManyWithoutGenreInput = {
-    create?: XOR<MovieCreateWithoutGenreInput, MovieUncheckedCreateWithoutGenreInput> | MovieCreateWithoutGenreInput[] | MovieUncheckedCreateWithoutGenreInput[]
-    connectOrCreate?: MovieCreateOrConnectWithoutGenreInput | MovieCreateOrConnectWithoutGenreInput[]
-    createMany?: MovieCreateManyGenreInputEnvelope
+  export type MovieUncheckedCreateNestedManyWithoutGenresInput = {
+    create?: XOR<MovieCreateWithoutGenresInput, MovieUncheckedCreateWithoutGenresInput> | MovieCreateWithoutGenresInput[] | MovieUncheckedCreateWithoutGenresInput[]
+    connectOrCreate?: MovieCreateOrConnectWithoutGenresInput | MovieCreateOrConnectWithoutGenresInput[]
     connect?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
   }
 
-  export type MovieUpdateManyWithoutGenreNestedInput = {
-    create?: XOR<MovieCreateWithoutGenreInput, MovieUncheckedCreateWithoutGenreInput> | MovieCreateWithoutGenreInput[] | MovieUncheckedCreateWithoutGenreInput[]
-    connectOrCreate?: MovieCreateOrConnectWithoutGenreInput | MovieCreateOrConnectWithoutGenreInput[]
-    upsert?: MovieUpsertWithWhereUniqueWithoutGenreInput | MovieUpsertWithWhereUniqueWithoutGenreInput[]
-    createMany?: MovieCreateManyGenreInputEnvelope
+  export type MovieUpdateManyWithoutGenresNestedInput = {
+    create?: XOR<MovieCreateWithoutGenresInput, MovieUncheckedCreateWithoutGenresInput> | MovieCreateWithoutGenresInput[] | MovieUncheckedCreateWithoutGenresInput[]
+    connectOrCreate?: MovieCreateOrConnectWithoutGenresInput | MovieCreateOrConnectWithoutGenresInput[]
+    upsert?: MovieUpsertWithWhereUniqueWithoutGenresInput | MovieUpsertWithWhereUniqueWithoutGenresInput[]
     set?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
     disconnect?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
     delete?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
     connect?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
-    update?: MovieUpdateWithWhereUniqueWithoutGenreInput | MovieUpdateWithWhereUniqueWithoutGenreInput[]
-    updateMany?: MovieUpdateManyWithWhereWithoutGenreInput | MovieUpdateManyWithWhereWithoutGenreInput[]
+    update?: MovieUpdateWithWhereUniqueWithoutGenresInput | MovieUpdateWithWhereUniqueWithoutGenresInput[]
+    updateMany?: MovieUpdateManyWithWhereWithoutGenresInput | MovieUpdateManyWithWhereWithoutGenresInput[]
     deleteMany?: MovieScalarWhereInput | MovieScalarWhereInput[]
   }
 
-  export type MovieUncheckedUpdateManyWithoutGenreNestedInput = {
-    create?: XOR<MovieCreateWithoutGenreInput, MovieUncheckedCreateWithoutGenreInput> | MovieCreateWithoutGenreInput[] | MovieUncheckedCreateWithoutGenreInput[]
-    connectOrCreate?: MovieCreateOrConnectWithoutGenreInput | MovieCreateOrConnectWithoutGenreInput[]
-    upsert?: MovieUpsertWithWhereUniqueWithoutGenreInput | MovieUpsertWithWhereUniqueWithoutGenreInput[]
-    createMany?: MovieCreateManyGenreInputEnvelope
+  export type MovieUncheckedUpdateManyWithoutGenresNestedInput = {
+    create?: XOR<MovieCreateWithoutGenresInput, MovieUncheckedCreateWithoutGenresInput> | MovieCreateWithoutGenresInput[] | MovieUncheckedCreateWithoutGenresInput[]
+    connectOrCreate?: MovieCreateOrConnectWithoutGenresInput | MovieCreateOrConnectWithoutGenresInput[]
+    upsert?: MovieUpsertWithWhereUniqueWithoutGenresInput | MovieUpsertWithWhereUniqueWithoutGenresInput[]
     set?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
     disconnect?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
     delete?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
     connect?: MovieWhereUniqueInput | MovieWhereUniqueInput[]
-    update?: MovieUpdateWithWhereUniqueWithoutGenreInput | MovieUpdateWithWhereUniqueWithoutGenreInput[]
-    updateMany?: MovieUpdateManyWithWhereWithoutGenreInput | MovieUpdateManyWithWhereWithoutGenreInput[]
+    update?: MovieUpdateWithWhereUniqueWithoutGenresInput | MovieUpdateWithWhereUniqueWithoutGenresInput[]
+    updateMany?: MovieUpdateManyWithWhereWithoutGenresInput | MovieUpdateManyWithWhereWithoutGenresInput[]
     deleteMany?: MovieScalarWhereInput | MovieScalarWhereInput[]
   }
 
@@ -5132,17 +5108,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -5159,33 +5124,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type MovieCreateWithoutUserInput = {
     name: string
     year: number
@@ -5193,7 +5131,7 @@ export namespace Prisma {
     score: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    Genre?: GenreCreateNestedOneWithoutMoviesInput
+    genres?: GenreCreateNestedManyWithoutMoviesInput
   }
 
   export type MovieUncheckedCreateWithoutUserInput = {
@@ -5204,7 +5142,7 @@ export namespace Prisma {
     score: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    genre: string
+    genres?: GenreUncheckedCreateNestedManyWithoutMoviesInput
   }
 
   export type MovieCreateOrConnectWithoutUserInput = {
@@ -5242,10 +5180,9 @@ export namespace Prisma {
     year?: IntFilter<"Movie"> | number
     posterImage?: StringFilter<"Movie"> | string
     score?: FloatFilter<"Movie"> | number
+    userId?: IntFilter<"Movie"> | number
     createdAt?: DateTimeFilter<"Movie"> | Date | string
     updatedAt?: DateTimeFilter<"Movie"> | Date | string
-    userId?: IntNullableFilter<"Movie"> | number | null
-    genre?: StringFilter<"Movie"> | string
   }
 
   export type UserCreateWithoutMoviesInput = {
@@ -5316,15 +5253,113 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GenreUpsertWithoutMoviesInput = {
+  export type GenreUpsertWithWhereUniqueWithoutMoviesInput = {
+    where: GenreWhereUniqueInput
     update: XOR<GenreUpdateWithoutMoviesInput, GenreUncheckedUpdateWithoutMoviesInput>
     create: XOR<GenreCreateWithoutMoviesInput, GenreUncheckedCreateWithoutMoviesInput>
-    where?: GenreWhereInput
   }
 
-  export type GenreUpdateToOneWithWhereWithoutMoviesInput = {
-    where?: GenreWhereInput
+  export type GenreUpdateWithWhereUniqueWithoutMoviesInput = {
+    where: GenreWhereUniqueInput
     data: XOR<GenreUpdateWithoutMoviesInput, GenreUncheckedUpdateWithoutMoviesInput>
+  }
+
+  export type GenreUpdateManyWithWhereWithoutMoviesInput = {
+    where: GenreScalarWhereInput
+    data: XOR<GenreUpdateManyMutationInput, GenreUncheckedUpdateManyWithoutMoviesInput>
+  }
+
+  export type GenreScalarWhereInput = {
+    AND?: GenreScalarWhereInput | GenreScalarWhereInput[]
+    OR?: GenreScalarWhereInput[]
+    NOT?: GenreScalarWhereInput | GenreScalarWhereInput[]
+    id?: IntFilter<"Genre"> | number
+    name?: StringFilter<"Genre"> | string
+    createdAt?: DateTimeFilter<"Genre"> | Date | string
+    updatedAt?: DateTimeFilter<"Genre"> | Date | string
+  }
+
+  export type MovieCreateWithoutGenresInput = {
+    name: string
+    year: number
+    posterImage: string
+    score: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutMoviesInput
+  }
+
+  export type MovieUncheckedCreateWithoutGenresInput = {
+    id?: number
+    name: string
+    year: number
+    posterImage: string
+    score: number
+    userId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MovieCreateOrConnectWithoutGenresInput = {
+    where: MovieWhereUniqueInput
+    create: XOR<MovieCreateWithoutGenresInput, MovieUncheckedCreateWithoutGenresInput>
+  }
+
+  export type MovieUpsertWithWhereUniqueWithoutGenresInput = {
+    where: MovieWhereUniqueInput
+    update: XOR<MovieUpdateWithoutGenresInput, MovieUncheckedUpdateWithoutGenresInput>
+    create: XOR<MovieCreateWithoutGenresInput, MovieUncheckedCreateWithoutGenresInput>
+  }
+
+  export type MovieUpdateWithWhereUniqueWithoutGenresInput = {
+    where: MovieWhereUniqueInput
+    data: XOR<MovieUpdateWithoutGenresInput, MovieUncheckedUpdateWithoutGenresInput>
+  }
+
+  export type MovieUpdateManyWithWhereWithoutGenresInput = {
+    where: MovieScalarWhereInput
+    data: XOR<MovieUpdateManyMutationInput, MovieUncheckedUpdateManyWithoutGenresInput>
+  }
+
+  export type MovieCreateManyUserInput = {
+    id?: number
+    name: string
+    year: number
+    posterImage: string
+    score: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MovieUpdateWithoutUserInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    posterImage?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    genres?: GenreUpdateManyWithoutMoviesNestedInput
+  }
+
+  export type MovieUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    posterImage?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    genres?: GenreUncheckedUpdateManyWithoutMoviesNestedInput
+  }
+
+  export type MovieUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    posterImage?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GenreUpdateWithoutMoviesInput = {
@@ -5340,137 +5375,43 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MovieCreateWithoutGenreInput = {
-    name: string
-    year: number
-    posterImage: string
-    score: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    User?: UserCreateNestedOneWithoutMoviesInput
+  export type GenreUncheckedUpdateManyWithoutMoviesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MovieUncheckedCreateWithoutGenreInput = {
-    id?: number
-    name: string
-    year: number
-    posterImage: string
-    score: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId?: number | null
-  }
-
-  export type MovieCreateOrConnectWithoutGenreInput = {
-    where: MovieWhereUniqueInput
-    create: XOR<MovieCreateWithoutGenreInput, MovieUncheckedCreateWithoutGenreInput>
-  }
-
-  export type MovieCreateManyGenreInputEnvelope = {
-    data: MovieCreateManyGenreInput | MovieCreateManyGenreInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type MovieUpsertWithWhereUniqueWithoutGenreInput = {
-    where: MovieWhereUniqueInput
-    update: XOR<MovieUpdateWithoutGenreInput, MovieUncheckedUpdateWithoutGenreInput>
-    create: XOR<MovieCreateWithoutGenreInput, MovieUncheckedCreateWithoutGenreInput>
-  }
-
-  export type MovieUpdateWithWhereUniqueWithoutGenreInput = {
-    where: MovieWhereUniqueInput
-    data: XOR<MovieUpdateWithoutGenreInput, MovieUncheckedUpdateWithoutGenreInput>
-  }
-
-  export type MovieUpdateManyWithWhereWithoutGenreInput = {
-    where: MovieScalarWhereInput
-    data: XOR<MovieUpdateManyMutationInput, MovieUncheckedUpdateManyWithoutGenreInput>
-  }
-
-  export type MovieCreateManyUserInput = {
-    id?: number
-    name: string
-    year: number
-    posterImage: string
-    score: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    genre: string
-  }
-
-  export type MovieUpdateWithoutUserInput = {
+  export type MovieUpdateWithoutGenresInput = {
     name?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
     posterImage?: StringFieldUpdateOperationsInput | string
     score?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Genre?: GenreUpdateOneWithoutMoviesNestedInput
+    user?: UserUpdateOneRequiredWithoutMoviesNestedInput
   }
 
-  export type MovieUncheckedUpdateWithoutUserInput = {
+  export type MovieUncheckedUpdateWithoutGenresInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
     posterImage?: StringFieldUpdateOperationsInput | string
     score?: FloatFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    genre?: StringFieldUpdateOperationsInput | string
   }
 
-  export type MovieUncheckedUpdateManyWithoutUserInput = {
+  export type MovieUncheckedUpdateManyWithoutGenresInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     year?: IntFieldUpdateOperationsInput | number
     posterImage?: StringFieldUpdateOperationsInput | string
     score?: FloatFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    genre?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type MovieCreateManyGenreInput = {
-    id?: number
-    name: string
-    year: number
-    posterImage: string
-    score: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId?: number | null
-  }
-
-  export type MovieUpdateWithoutGenreInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    year?: IntFieldUpdateOperationsInput | number
-    posterImage?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User?: UserUpdateOneWithoutMoviesNestedInput
-  }
-
-  export type MovieUncheckedUpdateWithoutGenreInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    year?: IntFieldUpdateOperationsInput | number
-    posterImage?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type MovieUncheckedUpdateManyWithoutGenreInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    year?: IntFieldUpdateOperationsInput | number
-    posterImage?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 
@@ -5482,6 +5423,10 @@ export namespace Prisma {
      * @deprecated Use UserCountOutputTypeDefaultArgs instead
      */
     export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MovieCountOutputTypeDefaultArgs instead
+     */
+    export type MovieCountOutputTypeArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = MovieCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use GenreCountOutputTypeDefaultArgs instead
      */

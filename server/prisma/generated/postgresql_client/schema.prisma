@@ -26,23 +26,22 @@ model User {
 
 model Movie {
     id          Int      @id @default(autoincrement())
-    name        String
+    name        String   @db.VarChar(200)
     year        Int
     posterImage String
     score       Float
+    // If movie is eliminated, then movie will be eliminated from User array and the Genre array
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      Int
+    genres      Genre[]
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
-    // If movie is eliminated, then movie will be eliminated from User array and the Genre array
-    User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId      Int?
-    Genre       Genre?   @relation(fields: [genre], references: [name], onDelete: Cascade)
-    genre       String
 }
 
 model Genre {
     id        Int      @id @default(autoincrement())
     name      String   @unique
+    movies    Movie[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    movies    Movie[]
 }

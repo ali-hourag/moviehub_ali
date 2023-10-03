@@ -122,10 +122,9 @@ exports.Prisma.MovieScalarFieldEnum = {
   year: 'year',
   posterImage: 'posterImage',
   score: 'score',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   userId: 'userId',
-  genre: 'genre'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.GenreScalarFieldEnum = {
@@ -143,11 +142,6 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
-};
-
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
 };
 
 
