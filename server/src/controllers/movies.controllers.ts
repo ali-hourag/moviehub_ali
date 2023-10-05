@@ -27,12 +27,12 @@ export const createMovie = async (req: any, res: any) => {
                 year: parseInt(year),
                 posterImage: upload.secure_url,
                 score: parseFloat(score),
-                User: {
+                user: {
                     connect: {
                         id: convertToType(userId)
                     }
                 },
-                Genre: {
+                genres: {
                     connect: {
                         name: genre
                     }

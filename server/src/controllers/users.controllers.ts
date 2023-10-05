@@ -6,7 +6,6 @@ import { convertToType } from "../helpers/utils";
 //---------------- CREATE USER ----------------
 export const createUser = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
-    console.log(name, email);
     try {
         // Make sure all required fields are available
         if (!name || !email) {
@@ -26,6 +25,7 @@ export const createUser = async (req: Request, res: Response) => {
         res.status(201).send(newUser);
 
     } catch (error) {
+        console.log(error);
         res.status(500).send(error);
     }
 }
@@ -45,7 +45,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
                         year: true,
                         score: true,
                         posterImage: true,
-                        genre: true
+                        genres: true
                     }
                 }
             }
@@ -53,6 +53,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         res.status(200).send(allUsers);
 
     } catch (error) {
+        console.log(error);
         res.status(500).send(error);
     }
 }
