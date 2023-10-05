@@ -5,7 +5,7 @@ import { checkJwtMiddleware } from '../middleware/checkJwt.middleware';
 
 const MoviesRouter: Router = Router();
 
-MoviesRouter.post("/:userId/:genre", checkJwtMiddleware, checkMovieData, createMovie)
+MoviesRouter.post("/:userId", checkJwtMiddleware, createMovie)
     .get("/", checkJwtMiddleware, getAllMovies)
     .get("/:movieId", checkJwtMiddleware, getMovieById)
     .patch("/:movieId", checkJwtMiddleware, checkMovieData, updateMovie)

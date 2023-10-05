@@ -74,7 +74,7 @@ export const getUserByEmail = async (req: Request, res: Response) => {
                         year: true,
                         score: true,
                         posterImage: true,
-                        genre: true
+                        genres: true
                     }
                 }
             }

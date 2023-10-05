@@ -2,22 +2,39 @@ import { Request, Response } from "express";
 import { prismaClient } from "../db/clientPrisma";
 import { convertToType } from "../helpers/utils";
 import { uploadImage } from "../utils/cloudinary";
+import fs from 'fs-extra';
 
 //---------------- CREATE MOVIE ----------------
 export const createMovie = async (req: any, res: any) => {
-    const { userId, genre } = req.params
-    const { name, year, score } = req.body
-
+    console.log("llwgo a la bbdd");
+    const { userId } = req.params
+    let { name, year, score, genres } = req.body
+    console.log(name, year, genres);
 
     try {
 
-        if (!name || !year) {
+        if (!name || !year || !genres) {
             res.status(404).send({ error: "Missing required fields." });
             return;
         }
 
-        const upload = await uploadImage((req.files as any).posterImage.tempFilePath);
+        if (!Array.isArray(genres)) {
+            genres = genres.split(',').map((genre: string) => genre.trim());
+        }
+        const genresIdArr = [];
+        for (const genreName of genres) {
+            const genre = await prismaClient.genre.findUnique({
+                where: {
+                    name: genreName
+                }
+            })
+            if (genre) {
+                genresIdArr.push(genre.id);
+            }
+        }
 
+        const upload = await uploadImage((req.files as any).image.tempFilePath);
+        await fs.unlink((req.files as any).image.tempFilePath);
 
 
         // Connect with User and Genre so that everything is updated.
@@ -33,9 +50,7 @@ export const createMovie = async (req: any, res: any) => {
                     }
                 },
                 genres: {
-                    connect: {
-                        name: genre
-                    }
+                    connect: genresIdArr.map(genresId => ({ id: genresId }))
                 }
             }
         })
@@ -43,6 +58,7 @@ export const createMovie = async (req: any, res: any) => {
         res.status(201).send(newMovie)
 
     } catch (error) {
+        console.log(error);
         res.status(500).send(console.log(error))
     }
 }
@@ -67,6 +83,9 @@ export const getMovieById = async (req: Request, res: Response) => {
         const movie = await prismaClient.movie.findUnique({
             where: {
                 id: convertToType(movieId)
+            },
+            include: {
+                genres: true
             }
         })
         if (!movie) {
@@ -81,11 +100,37 @@ export const getMovieById = async (req: Request, res: Response) => {
 }
 //---------------- UPDATE MOVIE ----------------
 export const updateMovie = async (req: Request, res: Response) => {
-    const { name, year, score } = req.body
+    let { name, year, score, genres } = req.body
     const { movieId } = req.params
     try {
 
-        // const upload = await uploadImage((req.files as any).posterImage.tempFilePath);
+        if (!Array.isArray(genres)) {
+            genres = genres.split(',').map((genre: string) => genre.trim());
+        }
+
+        const genresIdArr = [];
+        const disconnectedGenresIdArr = [];
+        const allGenres = await prismaClient.genre.findMany();
+        for (const genreName of genres) {
+            const genre = await prismaClient.genre.findUnique({
+                where: {
+                    name: genreName
+                }
+            })
+            if (genre) {
+                genresIdArr.push(genre.id);
+            }
+        }
+        for (const genre of allGenres) {
+            if (!genresIdArr.includes(genre.id)) {
+                disconnectedGenresIdArr.push(genre.id)
+            }
+        }
+        console.log(genresIdArr);
+        console.log(disconnectedGenresIdArr);
+
+        const upload = await uploadImage((req.files as any).image.tempFilePath);
+        await fs.unlink((req.files as any).image.tempFilePath);
 
 
         const updatedMovie = await prismaClient.movie.update({
@@ -96,6 +141,11 @@ export const updateMovie = async (req: Request, res: Response) => {
                 name: name,
                 year: parseInt(year),
                 score: parseInt(score),
+                posterImage: upload.secure_url,
+                genres: {
+                    disconnect: disconnectedGenresIdArr.map(genresId => ({ id: genresId })),
+                    connect: genresIdArr.map(genresId => ({ id: genresId })),
+                }
             }
         })
 
