@@ -6,6 +6,7 @@ import { Genre } from "../types/genresTypes";
 export const getAllMoviesApi = async (getToken: any) => {
     const { VITE_API_URL: url } = import.meta.env;
     const token = await getToken();
+    console.log(token);
     const response = await fetch(`${url}/movies`, {
         method: "GET",
         headers: {
@@ -21,6 +22,7 @@ export const getAllMoviesApi = async (getToken: any) => {
 export const getUserByEmail = async (getToken: any, userEmail: string) => {
     const { VITE_API_URL: url } = import.meta.env;
     const token = await getToken();
+    console.log(token);
     const response = await fetch(`${url}/users/${userEmail}`, {
         method: "GET",
         headers: {
@@ -60,6 +62,7 @@ export const getAllGenres = async () => {
 export const updateMovieGenre = async (getToken: any, movie: Movie, genre: Genre) => {
     const { VITE_API_URL: url } = import.meta.env;
     const token = await getToken();
+    console.log(token);
     const response = await fetch(`${url}/movies/${movie.id}/${genre.name}`, {
         method: "PATCH",
         headers: {
